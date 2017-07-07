@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task03</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Task 03</h1>
+    <p>Создайте страницу содержащую input и textarea, кнопку. При нажатии кнопки на сервер передается название файла из input, и содержимое из textarea. Сервер записывает данные в файл с соответствующим именем.
+</p>
+    <form action="/register" method="post" name="registerForm">
+        <label>enter File name</label></br>
+        <input type="text" name="fileName" /></br></br>
+        <label>enter text</label></br>
+        <textarea name="userText" rows="8" cols="80"></textarea>
+        <!-- <input type="text" name="userText" /></br></br> -->
+        <input type="submit" value="Save" />
+        <p class="result hidden"></p>
+
+
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        $("form").submit(function(e) {
+
+            e.preventDefault();
+            var fileName = registerForm.elements["fileName"].value;
+            var userText = registerForm.elements["userText"].value;
+
+
+            $.ajax({
+                type: "POST",
+                url: "/text",
+                data: JSON.stringify({fileName: fileName, userText: userText}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    console.log(data);
+                    $(".result").html(data);
+                },
+            });
+        });
+    </script>
+</body>
+<html>

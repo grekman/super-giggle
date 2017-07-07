@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task04</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Task 04</h1>
+    <p>Создайте на сервере папку. Внутри папки несколько текстовых файлов с разным содержимым. Создайте скрипт который при загрузке страницы выводит на страницу названия данных файлов (это можно сделать как на стороне клиента, так и сервера). Добавьте событие клик на названия имен файлов.
+При клике на имени файла – в div#out выводится содержимое файла на котором кликнули (при клике отправляем AJAX запрос на чтение файла, получаем содержимое и выводим).
+</p>
+    <form action="/register" method="post" name="registerForm">
+        <h2>File list</h2></br>
+        <!-- <input type="number" name="userNumber" /></br></br>
+        <input type="submit" value="Отправить" /> -->
+        <p class="result"></p>
+        <div class="out"></div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+
+    $(document).ready(function() {
+
+      $.ajax({
+        type: "POST",
+        url: "/readfilein",
+        dataType: "json",
+        contentType: "application/json",
+        success: function(data){
+          console.log(data);
+          for(var key in data) {
+            var item = document.createElement('p');
+            console.log(data[key]);
+            item.innerHTML = data[key];
+            item.onclick = (e) => {
+              console.log('e: ', e);
+
+              $.ajax({
+                type: "POST",
+                url: "/readfileout",
+                data: JSON.stringify({userFile: e.target.innerHTML}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data2){
+                  console.log(data2);
+                  $(".out").html(data2);
+                }
+              });
+
+            }
+
+            $(".result").append(item);
+
+          };
+        }
+      });
+    });
+    </script>
+</body>
+<html>

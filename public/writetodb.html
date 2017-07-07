@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task05</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Task 05</h1>
+    <p>Создайте страницу, содержащую три input. Первый – имя, второй – ссылка на изображение, третий – цена. При нажатии кнопки данные из input отправляются на сервер с помощью  AJAX. Сервер записывает данные в базу.
+</p>
+    <form action="/register" method="post" name="registerForm">
+        <label>Name</label></br>
+        <input type="text" name="productName" /></br></br>
+        <label>Link</label></br>
+        <input type="url" name="imageUrl" /></br></br>
+        <label>Price</label></br>
+        <input type="number" name="productPrice" /></br></br>
+        <input type="submit" value="Отправить" />
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        $("form").submit(function(e) {
+
+            e.preventDefault();
+            var registerForm = document.forms["registerForm"];
+            var productName = registerForm.elements["productName"].value;
+            var imageUrl = registerForm.elements["imageUrl"].value;
+            var productPrice = registerForm.elements["productPrice"].value;
+
+            $.ajax({
+                type: "POST",
+                url: "/product",
+                data: JSON.stringify({productName: productName, imageUrl: imageUrl, productPrice: productPrice}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    console.log(data);
+                    },
+                });
+        });
+    </script>
+</body>
+<html>
